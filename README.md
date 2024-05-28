@@ -1,40 +1,114 @@
-### Approach to solve this recommendation problem:
+# 基于多模型协同过滤的机器学习方法
 
-  - **Implicit latent feature learning based models (Unsupervised)**
-    To fill the ratings matrix, there are traditional matrix-factorization based methods like singular value decomposition and non-matrix-factorization methods like ratings prediction based on the cosine similarity between restaurants (or users). In this methods, the models implicitly learns the latent features of the users and restaurants and use them to predict the unseen ratings.
+## 项目概述
+本项目致力于开发一个餐厅评分预测算法，专注于通过多种机器学习技术对Yelp数据集上的餐厅进行评分预测。我们使用了包括奇异值分解SVD、余弦相似度、交替最小二乘法ALS、随机梯度下降SGD和随机森林等方法，以提供准确的评分预测并增强推荐系统的性能。
 
-  - **Singular Value Decomposition**
-The singular value decomposition helps to get a low-rank approximation of the ratings matrix. This lowrank approximated matrix is not sparse like the ratings matrix and predicts the previously unseen ratings that might be given by a user to a restaurant.
-  - **Cosine Similarity Based Prediction**
-    Another traditional approach to predict unseen ratings for a restaurant is by comparing the restaurant (the user) to other similar restaurants (users) in the data set and inferring the ratings based on the ratings given the similar restaurants (users).
-  - **Explicit latent features learning based models (Supervised)**
- We estimate the similarity between the restaurants (users) using the cosine similarity. Some modifications to this approach is to correct the ratings matrix for the restaurant (user) biases before finding the similar restaurants (users).
-  *In this project, the singular value decomposition and cosine-similarity based ratings predictions would act as the baseline models.*
-  - **Latent Features Learning using Alternating Least Squares (ALS) Method**
-    In the ALS method, each user is represented by a k-dimensional feature vector where each dimension represents an attribute of the user which is latent. Similarly, each restaurant is also represented using a k-dimensional vector containing k latent features describing the restaurant. These features are learnt by the model and are parameters of the model. Hence, the data instance will be a randomly initialized k-dimensional vector representing the user xi, a randomly initialized k-dimensional vector representing the restaurant yj, the rating given by the user to the restaurant 𝑟𝑖𝑗. The target variable is 𝑟𝑖𝑗. The function that predicts rij from xi, yj is a simple dot product between the feature vectors. The loss function will be a mean square loss with L2 regularization on xi, yj since they are the parameters of our model. Given this setup, we can find all xi’s and yj’s and fill the matrix as a typical supervised learning problem.
-  - **Latent Features Learning using Stochastic Gradient Descent (SGD) model**
-    In the SGD model, the setting is similar to ALS where the latent feature for each user and restaurant is learned. In addition to ALS, there is an additional parameter that is learned for each user and restaurant. For each user and restaurant, a bias term is also learned. The intuition behind learning this bias term is many a times some user or restaurant tend to give / receive higher ratings on average as compared to others. So to ensure that the latent feature for each user and restaurant is free from such biases, it is learned as a separate parameter. Essentially, the final rating given by a user i to restaurant j is broken into four components: a global bias (average of all the available ratings), a user bias, a restaurant bias and a component dependent on the interaction between user i and restaurant j. To learn the parameters of the model (all the biases and latent feature vectors), stochastic gradient descent is used. Hence, it is called SGD model.
-  - **Converting it into a Regression/Classification Problem**
- Using the latent features learned for each user and restaurant, the matrix completion problem can be converted to a regression or a classification problem that can be dealt with using powerful techniques like Random Forest Regressor, etc. In this project, we have tried with Random Forest Regressor.
-- **Random Forest Regressor Based Model**
-  Random forest regressor tries to learn the non-linear dependency between the user latent vectors and restaurant latent vectors. The target variable is the rating given by user i to restaurant j. It essentially boils down to a regression problem.
-  **Evaluation Metric**
-  The evaluation metric used for comparing the different models is the mean square error (MSE). The mean square error is easy to interpret. The square root of MSE will give the error the recommendation engine makes while predicting an unknown rating. The lower MSE means the model has correctly learned the latent features that characterizes the user and restaurant which can be used by Yelp to generate insights and recommends new restaurants to users and new users to restaurants.
-  The model selection is based on the best out of sample MSE obtained for a model. The reasons for improvement in the MSE between different models are analyzed and documented in this report.
-  
+## 项目配置方法
 
+1. **（推荐）安装Anaconda**
 
-### Summary of the models:
+   - 访问Anaconda官方网站：[www.anaconda.com](https://www.anaconda.com)，从[下载页面](https://www.anaconda.com/download)获取安装程序。
+   - 如果在**中国大陆**，由于网络问题，建议使用[清华大学Anaconda镜像站点](https://mirrors.tuna.tsinghua.edu.cn/help/anaconda/)进行下载。
+   - 完成安装后，按照[这个教程](https://blog.csdn.net/weixin_43914658/article/details/108785084)来配置环境变量，以确保可以从命令行运行Anaconda。
 
-Based on the analysis of all the models, we choose the Ensemble Model for both the Restaurants in Phoenix and for the Restaurants in Scottsdale as the best model for recommendation.
-On testing the models on the Test Data, we got: MSE of 2.663 (for Restaurants in Phoenix) and 2.518 (for Restaurants in Scottsdale).
+2. **进入项目目录**
 
-| Models                        | Phoenix                | Scottsdale             |
-| ----------------------------- | ---------------------- | ---------------------- |
-| SVD                           | 17.19524313333571      | 16.68550995321838      |
-| Cosine Similarity based model | 16.68550995321838      | 17.025866680642704     |
-| GALS based model              | 17.230543322467152     | 16.729128335518105     |
-| SGD based model               | 17.230543322467152     | 2.7363082502586065     |
-| Random Forest Regressor       | 2.710045376922961      | 2.6717940609972395     |
-| ***Ensemble of SGD and RF***  | **2.6333817860275097** | **2.5183558867860882** |
+   - 使用命令行界面，导航到您的项目文件夹。
+
+3. **创建并激活虚拟环境**
+
+   - 创建虚拟环境：在命令行中输入以下命令：
+
+     ```bash
+     conda create -n Yelp_env python=3.11
+     ```
+
+   - 激活虚拟环境：
+
+     ```bash
+     conda activate Yelp_env
+     ```
+
+4. **安装项目依赖**
+
+   - 使用pip安装依赖。在项目目录中，有[`requirements.txt`](./requirements.txt)文件，列出了所有必需的Python库，使用以下命令安装依赖：
+
+     ```bash
+      pip install -r requirements.txt
+     ```
+     
+   - 如果在**中国大陆**，考虑使用[清华大学PyPI镜像](https://mirrors.tuna.tsinghua.edu.cn/help/pypi/)加速依赖安装：
+   
+  ```bash
+     pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+  ```
+
+## 项目结构
+```bash
+$ tree
+.
+├── README-SC.md
+├── README.md
+├── assets
+│   ├── Palette.json
+│   ├── PingFang.ttc
+│   ├── yelp_business_dtype.json
+│   └── yelp_dtype.json
+├── data
+│   ├── README-SC.md
+│   ├── README.md
+│   ├── Yelp_final.csv
+│   ├── yelp_academic_dataset_business.csv
+│   └── yelp_academic_dataset_review.csv
+├── images
+│   ├── 01_每个城市的商家数量.png
+│   ├── 02_最受欢迎的商家类别.png
+│   ├── 03_城市和商家类别组合数量.png
+│   ├── 04_获得评论最多的城市和商家类别组合.png
+│   ├── Phoenix
+│   │   ├── 01_SVD奇异值分布_前20个主成分.png
+│   │   ├── 02_不同奇异值数量下的训练集和验证集误差.png
+│   │   ├── 03_不同奇异值数量下验证集误差.png
+│   │   ├── 04_前两个主成分散点图.png
+│   │   ├── 05_去除偏差后的SVD_奇异值分布（前1000个）.png
+│   │   ├── 06_去除偏差后SVD_验证集重构误差.png
+│   │   ├── 07_去除偏差后的SVD_奇异值分布.png
+│   │   ├── 08_去除偏差后的SVD_验证集重构误差.png
+│   │   ├── 09_余弦相似度模型_不同K值对评分预测MSE的影响.png
+│   │   ├── 10_ALS_特征数量与均方误差的关系.png
+│   │   ├── 11_ALS_正则化系数对MSE的影响.png
+│   │   ├── 12_带偏差修正的SGD_MSE与迭代次数的关系.png
+│   │   └── 13_带偏差修正的SGD_特征数量与MSE关系.png
+│   └── Scottsdale
+│       ├── 01_SVD奇异值分布_前20个主成分.png
+│       ├── 02_不同奇异值数量下验证集误差.png
+│       ├── 03_不同奇异值数量下验证集误差.png
+│       ├── 04_前两个主成分散点图.png
+│       ├── 05_去除偏差后的SVD_奇异值分布（前1000个）.png
+│       └── 06_去除偏差后的SVD_验证集重构误差.png
+├── notebooks
+│   ├── 01_数据预处理.ipynb
+│   ├── 02_Phoenix餐厅.ipynb
+│   └── 03_Scottsdale餐厅.ipynb
+├── reference
+│   ├── 1404.1100v1.pdf
+│   ├── Wikipedia.md
+│   ├── 奇艺值分解.md
+│   ├── 【学长小课堂】什么是奇异值分解SVD--SVD如何分解时空矩阵.mp4
+│   └── 【学长小课堂】什么是奇异值分解SVD--SVD如何分解时空矩阵.srt
+└── src
+    ├── __init__.py
+    ├── color_generator.py
+    ├── evaluation.py
+    ├── model.py
+    └── preprocessing.py
+
+9 directories, 47 files
+```
+
+## 贡献者
+
+[孙逸青](mailto:william_syq@tju.edu.cn)
+
+[张颢南](mailto:shu_1294491613@tju.edu.cn)
 
