@@ -1,0 +1,131 @@
+{
+    "#E5E5E5": {
+        "Generic Gradient": [
+            "#F9E1F4",
+            "#FFD8E8",
+            "#FFD5CO",
+            "#FFE18F",
+            "#F9F871"
+        ],
+        "Matching Gradient": [
+            "#C6C9CE",
+            "#A3AEB6",
+            "#7E969C",
+            "#5D7D7D",
+            "#43655A"
+        ],
+        "Spot Palette": [
+            "#AEAEAE",
+            "#F2ECFF",
+            "#005A34"
+        ],
+        "Twisted Spot Palette": [
+            "#00754B",
+            "#C8FCEA",
+            "#6A9A8B"
+        ],
+        "Classy Palette": [
+            "#474554",
+            "#ACA7CB",
+            "#FFOOF6",
+            "#FFOOEO"
+        ],
+        "Cube Palette": [
+            "#OOC6CF",
+            "#7FD1AE"
+        ],
+        "Switch Palette": [
+            "#363636",
+            "#009063",
+            "#CAC7DA"
+        ],
+        "Small Switch Palette": [
+            "#93E2E4",
+            "#007D83"
+        ],
+        "Skip Gradient": [
+            "#65FBD2",
+            "#05C19C",
+            "#008B69"
+        ],
+        "Natural Palette": [
+            "#8685EF",
+            "#FAF8FF",
+            "#CAC7DA"
+        ],
+        "Matching Palette": [
+            "#5F5C6D",
+            "#ACA9ВВ",
+            "#C7EDEO",
+            "#91B5A9"
+        ],
+        "Squash Palette": [
+            "#D6C7B7",
+            "#97D3DC"
+        ],
+        "Grey Friends": [
+            "#474554",
+            "#ACA7CB"
+        ],
+        "Dotting Palette": [
+            "#ACA7CB",
+            "#FFOOF6",
+            "#D19F9C"
+        ],
+        "Skip Shade Gradient": [
+            "#C5E3FE",
+            "#78EAFB",
+            "#54ECC4"
+        ],
+        "Threedom": [
+            "#D1AF9C",
+            "#A6C8BF"
+        ],
+        "Highlight Palette": [
+            "#8083FF",
+            "#CAC7DA",
+            "#7FDIAE"
+        ],
+        "Neighbor Palette": [
+            "#OOC6CF",
+            "#068488",
+            "#324B4C"
+        ],
+        "Discreet Palette": [
+            "#8685EF",
+            "#FAF7FF",
+            "#7FD1AE"
+        ],
+        "Dust Palette": [
+            "#474554",
+            "#ACA7CB",
+            "#FFOOF6"
+        ],
+        "Collective": [
+            "#BCABCO",
+            "#D6A4A1"
+        ],
+        "Friend Palette": [
+            "#474747",
+            "#00754B",
+            "#00C896"
+        ],
+        "Pin Palette": [
+            "#8083FF",
+            "#CAC7DA",
+            "#00AC7C"
+        ],
+        "Shades": [
+            "#B2B2B2",
+            "#838383",
+            "#565656",
+            "#2C2C2C"
+        ],
+        "Random Shades": [
+            "#3D3D3D",
+            "#C1C1C1",
+            "#6A6A6A",
+            "#4D4D4D"
+        ]
+    }
+}

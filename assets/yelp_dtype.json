@@ -1,0 +1,12 @@
+{
+    "user_id": "object",
+    "review_id": "object",
+    "text": "object",
+    "votes.cool": "int64",
+    "business_id": "object",
+    "votes.funny": "int64",
+    "stars": "int64",
+    "date": "object",
+    "type": "object",
+    "votes.useful": "int64"
+}
