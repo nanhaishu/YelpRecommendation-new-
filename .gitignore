@@ -129,3 +129,4 @@ venv.bak/
 .AppleDesktop
 .apdisk
 *.nosync
+*.zip
