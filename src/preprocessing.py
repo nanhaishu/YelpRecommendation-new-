@@ -1,3 +1,6 @@
+from sklearn.base import BaseEstimator
+from sklearn.base import BaseEstimator,
+from scipy import sparse
 import numpy as np
 import pandas as pd
 from scipy.sparse import csr_matrix, lil_matrix
@@ -174,3 +177,76 @@ def train_val_test_split(sparse_matrix, num_review_val=2, num_review_test=2):
     assert overlap_all.nnz == 0, "训练集、验证集和测试集之间存在重叠元素"
 
     return sparse_matrix_train, sparse_matrix_val, sparse_matrix_test
+
+
+class NBFeatures(BaseEstimator):
+    """朴素贝叶斯特征类
+
+    Args:
+        BaseEstimator (class): Scikit-learn的基础估计器类型
+    """
+
+    def __init__(self, alpha):
+        """
+        初始化函数，设置平滑参数。
+
+        Args:
+            alpha (float): 平滑参数，用于概率计算中的平滑处理，通常为1
+        """
+        self.alpha = alpha
+
+    def adjust_features(self, x, r):
+        """
+        调整特征数据x，使用对数概率比r进行调整。
+
+        Args:
+            x (sparse matrix): 原始特征矩阵
+            r (sparse matrix): 来自fit方法的对数比率矩阵
+
+        Returns:
+            sparse matrix: 调整后的特征矩阵
+        """
+        return x.multiply(r)
+
+    def compute_class_prob(self, x, y_i, y):
+        """
+        计算指定类别y_i的条件概率。
+
+        Args:
+            x (sparse matrix): 特征数据
+            y_i (int): 指定的类别
+            y (array): 整个数据集的标签数组
+
+        Returns:
+            sparse matrix: 给定类别的条件概率
+        """
+        p = x[y == y_i].sum(0)
+        return (p + self.alpha) / ((y == y_i).sum() + self.alpha)
+
+    def compute_log_ratio(self, x, y=None):
+        """
+        计算每个特征的对数概率比，并以稀疏矩阵形式存储。
+
+        Args:
+            x (sparse matrix): 特征数据
+            y (array, optional): 数据集的标签数组
+
+        Returns:
+            self: 返回自身对象，使得可以链式调用
+        """
+        self._r = sparse.csr_matrix(np.log(self.compute_class_prob(
+            x, 1, y) / self.compute_class_prob(x, 0, y)))
+        return self
+
+    def apply_nb_transform(self, x):
+        """
+        应用朴素贝叶斯转换到原始特征矩阵x。
+
+        Args:
+            x (sparse matrix): 原始特征矩阵
+
+        Returns:
+            sparse matrix: 转换后的特征矩阵
+        """
+        x_nb = self.adjust_features(x, self._r)
+        return x_nb
