@@ -1,5 +1,4 @@
 from sklearn.base import BaseEstimator
-from sklearn.base import BaseEstimator,
 from scipy import sparse
 import numpy as np
 import pandas as pd
@@ -223,7 +222,7 @@ class NBFeatures(BaseEstimator):
         p = x[y == y_i].sum(0)
         return (p + self.alpha) / ((y == y_i).sum() + self.alpha)
 
-    def compute_log_ratio(self, x, y=None):
+    def fit(self, x, y=None):
         """
         计算每个特征的对数概率比，并以稀疏矩阵形式存储。
 
@@ -238,7 +237,7 @@ class NBFeatures(BaseEstimator):
             x, 1, y) / self.compute_class_prob(x, 0, y)))
         return self
 
-    def apply_nb_transform(self, x):
+    def transform(self, x):
         """
         应用朴素贝叶斯转换到原始特征矩阵x。
 
@@ -250,3 +249,20 @@ class NBFeatures(BaseEstimator):
         """
         x_nb = self.adjust_features(x, self._r)
         return x_nb
+
+
+def get_coefs(word, *arr):
+    """
+    将从GloVe文件中读取的单词和其向量值转换为更易于处理的格式。
+
+    Args:
+        word (str): 从GloVe文件中读取的单词。
+        *arr (str): 与word关联的向量数值，传入时为字符串，会被转换为浮点数数组。
+
+    Returns:
+        tuple: 包含单词和其对应的NumPy数组形式向量的元组。
+    """
+    try:
+        return word, np.asarray(arr, dtype='float32')
+    except ValueError:
+        return word, None
