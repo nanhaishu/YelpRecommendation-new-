@@ -132,3 +132,4 @@ venv.bak/
 *.zip
 *.txt
 *.csv
+data/Yelp Dataset/*.json
